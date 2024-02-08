@@ -1,0 +1,166 @@
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<section>
+			<!-- Start Hero Section -->
+			<div class="hero">
+				<div class="container">
+					<div class="row justify-content-between">
+						<div class="col-lg-5">
+							<div class="intro-excerpt">
+								<h1>Cart</span></h1>
+							</div>
+						</div>
+						<div class="col-lg-7">
+							<div class="hero-img-wrap">
+								<img src="images/couch.png" class="img-fluid">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<!-- End Hero Section -->
+        
+		{{!-- cart section --}}
+			<div class="untree_co-section before-footer-section">
+            <div class="container">
+              {{#if products}}
+               <div class="row mb-5">
+                <form class="col-md-12" method="post">
+                  <div class="site-blocks-table">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th class="product-thumbnail">Image</th>
+                          <th class="product-name">Product</th>
+                          <th class="product-price">Price</th>
+                          <th class="product-quantity">Quantity</th>
+                          <th>Total Price</th>
+                          <th class="product-remove">Remove</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {{#each products}}
+                        <tr>
+                          <td class="product-thumbnail">
+                            <img src="{{this.images.[0]}}" alt="Image" class="img-fluid">
+                          </td>
+                          <td class="product-name">
+                            <h2 class="h5 text-black">{{this.name}}</h2>
+                          </td>
+                          <td class="current-price">{{this.price}}</td>
+                          <td >
+                            <div class="input-group mb-3 ml-3 d-flex align-items-center quantity-container" style="max-width: 120px;">
+                              <div class="input-group-prepend">
+                              <button class="btn btn-outline-black" onclick="decrementProduct('{{this.productId}}', '{{this.cartId}}',{{this.price}}, 'quantity-amount-{{@index}}')" type="button">-</button>
+                              </div>
+                              <input type="text" disabled class="form-control text-center " id="{{this.productId}}" value="{{this.quantity}}"  aria-label="Example text with button addon" aria-describedby="button-addon1">
+                              <div class="input-group-append">
+                              <button class="btn btn-outline-black" onclick="incrementProduct('{{this.productId}}', '{{this.cartId}}',{{this.price}}, 'quantity-amount-{{@index}}')" type="button">+</button>
+                              </div>
+                            </div>
+        
+                          </td>
+                          <td>
+                            <div  >
+                              {{!-- <input disabled type="text" class="total-price" value="{{this.total}}"> --}}
+                              <span> ₹<span id="total{{this.productId}}"> {{total}}</span></span>
+                            </div>
+                          </td>
+                          <td><a href="rfcart/{{@index}}" class="btn btn-black btn-sm">X</a></td>
+                        </tr>
+                        {{/each}}
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                </form>
+              </div>
+
+               <div class="row">
+                <div class="col-md-6 d-flex">
+                  <div class="row mb-5">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                     <a href="/shop" class="btn btn-black btn-sm btn-block">Continue Shopping</a>
+                    </div>
+                  </div>
+                  
+        
+                      <div class="row">
+                        <div class="col-md-12">
+                          <a href="checkout" class="btn btn-black btn-lg py-3 btn-block">Place order</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {{else}}
+            <b><i>Your cart is Empty</i></b>
+            {{/if}}
+             
+        
+             
+            </div>
+          </div>
+		
+		</section>
+
+<script>
+   function updateProductQuantity(productId, cartId, newQuantity,total) {
+      // Use fetch to update the quantity in the database
+      fetch('/updateQuantity', {
+         method: 'POST',
+         headers: {
+            'Content-Type': 'application/json',
+         },
+         body: JSON.stringify({
+            productId: productId,
+            cartId:cartId,
+            newQuantity: newQuantity,
+         }),
+      })
+      .then(response => {
+         if (!response.ok) {
+            throw new Error('Network response was not ok');
+         }
+         return response.json();
+      })
+      .then(data => {
+        
+         // Update the quantity on the page after successful update
+         document.getElementById(productId).value = newQuantity;
+         document.getElementById('total'+productId).innerHTML = total;
+      })
+      .catch(error => {
+         console.error('Error updating quantity:', error);
+      });
+   }
+
+   function incrementProduct(productId, cartId,price) {
+      // Get the current quantity
+      console.log("here")
+      var currentQuantity = parseInt(document.getElementById(productId).value)
+
+      // Increment the quantity
+      var newQuantity = currentQuantity + 1;
+       var total = newQuantity*price;
+      // Update the quantity in the database and on the page
+      updateProductQuantity(productId, cartId, newQuantity,total);
+   }
+
+   function decrementProduct(productId, cartId,price) {
+      // Get the current quantity
+      var currentQuantity = parseInt(document.getElementById(productId).value)
+
+      // Ensure the quantity doesn't go below 1
+      if (currentQuantity > 1) {
+         // Decrement the quantity
+         var newQuantity = currentQuantity - 1;
+         var total = newQuantity*price
+
+         // Update the quantity in the database and on the page
+         updateProductQuantity(productId, cartId, newQuantity,total);
+      }
+   }
+</script>

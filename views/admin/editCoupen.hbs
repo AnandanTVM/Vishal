@@ -1,0 +1,101 @@
+<div class="col-xl my-5 mx-4">
+                  <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                      <h5 class="mb-0">Edit Coupen</h5>
+                      
+                    </div>
+                    {{#each coupen}}
+                    <div class="card-body">
+                      <form  method="post">
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-icon-default-fullname">Coupen code</label>
+                          <div class="input-group input-group-merge">
+                             
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="basic-icon-default-fullname"
+                              name="couponCode"
+                              value="{{this.couponCode}}"
+                              aria-label="John Doe"
+                              aria-describedby="basic-icon-default-fullname2"
+                            />
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-icon-default-company">Coupon Type:</label>
+                           <select class="form-select" id="couponType" name="type" onchange="updateMaxRedeem()" required>
+                            {{#if (eq discount 'flatDiscount')}}
+                            <option value="percentageDiscount">Percentage Discount</option>
+                            <option value="flatDiscount" >Flat Discount</option>
+                            
+                            {{else}}
+                          
+                          <option value="flatDiscount" >Flat Discount</option>
+                          <option value="percentageDiscount">Percentage Discount</option>
+                          {{/if}}
+                      </select>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-icon-default-email">Minimum Price</label>
+                          <div class="input-group input-group-merge">
+                            <input
+                              type="number"
+                              id="basic-icon-default-email"
+                              class="form-control"
+                              name="minimumPrice"
+                              value="{{this.minimumPrice}}"
+                              aria-label="john.doe"
+                              aria-describedby="basic-icon-default-email2"
+                            />
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-icon-default-phone">Discount</label>
+                          <div class="input-group input-group-merge">
+                            
+                            <input
+                              type="number"
+                              id="basic-icon-default-phone"
+                              class="form-control phone-mask"
+                              aria-label="658 799 8941"
+                              value="{{this.discount}}"
+                              name="discount"
+                              aria-describedby="basic-icon-default-phone2"
+                            />
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-icon-default-email">Maximum Redeem Amount</label>
+                          <div class="input-group input-group-merge">
+                            <input
+                              type="number"
+                              id="basic-icon-default-email"
+                              class="form-control"
+                              aria-label="john.doe"
+                              value="{{this.maxRedeem}}"
+                              name="maxRedeem"
+                              aria-describedby="basic-icon-default-email2"
+                            />
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-icon-default-email">Expiry</label>
+                          <div class="input-group input-group-merge">
+                            <input
+                              type="date"
+                              id="basic-icon-default-email"
+                              class="form-control"
+                              name="expiry"
+                              value="{{this.expiry}}"
+                              aria-label="john.doe"
+                              aria-describedby="basic-icon-default-email2"
+                            />
+                          </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Edit Coupen</button>
+                      </form>
+                    </div>
+                    {{/each}}
+                  </div>
+                </div>
